@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="8" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="12">
+ <tileset firstgid="1" source="tileset_gutter (1).tsx"/>
+ <layer id="1" name="background" width="30" height="8">
+  <data encoding="base64" compression="zlib">
+   eJz7zcTA8HsUj+JRPCQxALBi7TE=
+  </data>
+ </layer>
+ <layer id="3" name="background2" width="30" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAvmMrEwDCNCZU9nYn29m4D2rGdCZW9g0J76el+ZEAt94+CoQ8AsdgKhw==
+  </data>
+ </layer>
+ <layer id="2" name="Ground" width="30" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF1AZKUDzYgRIDeW4lV99wBowDhAH96wEv
+  </data>
+ </layer>
+ <objectgroup id="4" name="Coin">
+  <object id="1" gid="58" x="128" y="56" width="16" height="16"/>
+  <object id="2" gid="58" x="352" y="52" width="16" height="16"/>
+  <object id="3" gid="58" x="408" y="24" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="6" name="HitPlatform">
+  <object id="7" gid="25" x="128" y="80" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="7" name="Pipe"/>
+ <objectgroup id="8" name="PlayerSpawn">
+  <object id="9" name="PlayerSpawn" x="36" y="112">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="10" name="EnemySpawn">
+  <object id="10" name="EnemySpawn" x="216" y="112">
+   <point/>
+  </object>
+  <object id="11" name="EnemySpawn" x="376" y="112">
+   <point/>
+  </object>
+ </objectgroup>
+</map>
