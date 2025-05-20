@@ -1,18 +1,21 @@
 package engine.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
-import static engine.map.GameMap.TAG;
+import static jokerhut.main.map.GameMap.TAG;
 import static jokerhut.main.MainGame.UNIT_SCALE;
 
 public class MapUtils {
@@ -55,9 +58,10 @@ public class MapUtils {
         return null;
     }
 
-    public static void parseCollisionLayer (TiledMap tiledMap, Array<CollisionArea> collisionAreas) {
+    //TODO add documentation
+    public static void parseCollisionLayer (TiledMap tiledMap, Array<CollisionArea> collisionAreas, String layerName) {
 
-        final MapLayer collisionLayer = tiledMap.getLayers().get("collisiontwo");
+        final MapLayer collisionLayer = tiledMap.getLayers().get(layerName);
         if (collisionLayer == null) {
             Gdx.app.debug(TAG, " there is no collision layer");
             return;
@@ -101,14 +105,36 @@ public class MapUtils {
                 final float[] polyVertices = polyline.getVertices();
 
                 collisionAreas.add(new CollisionArea(polyline.getX(), polyline.getY(), polyVertices, true));
+            } else if (mapObject.getProperties().containsKey("gid")) {
+                float x = mapObject.getProperties().get("x", Float.class);
+                float y = mapObject.getProperties().get("y", Float.class);
+                float width = mapObject.getProperties().get("width", Float.class);
+                float height = mapObject.getProperties().get("height", Float.class);
+                int gid = mapObject.getProperties().get("gid", Integer.class);
+                TiledMapTile tile = tiledMap.getTileSets().getTile(gid);
+                TextureRegion region = tile != null ? tile.getTextureRegion() : null;
+
+                float[] rectVertices = new float[] {
+                    0, 0,
+                    0, height,
+                    width, height,
+                    width, 0,
+                    0, 0
+                };
+
+                System.out.println("X: " + x + " Y: " + y + " W: " + width + " H: " + height);
+
+                CollisionArea area = new CollisionArea(x, y, rectVertices, false);
+                if (region != null) {
+                    area.setTexture(region, width, height);
+                }
+                collisionAreas.add(area);
             } else {
                 Gdx.app.debug(TAG, " Not supported");
             }
         }
+
     }
-
-
-
 
 
 

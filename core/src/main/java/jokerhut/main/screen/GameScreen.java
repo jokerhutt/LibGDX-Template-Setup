@@ -7,12 +7,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import jokerhut.main.MainGame;
 import jokerhut.main.constant.SETUPCONSTANTS;
-import engine.map.GameMap;
+import jokerhut.main.entity.MarioEntity;
+import jokerhut.main.map.GameMap;
 import jokerhut.main.view.GameUI;
 
+import static engine.map.MapUtils.parsePlayerStartLocation;
 import static jokerhut.main.MainGame.UNIT_SCALE;
+import static jokerhut.main.constant.SETUPCONSTANTS.marioTextureRegionSheet;
 
 public class GameScreen extends AbstractScreen<GameUI>{
 
@@ -21,6 +25,8 @@ public class GameScreen extends AbstractScreen<GameUI>{
     private final OrthographicCamera gameCamera;
     private final GLProfiler profiler;
     private GameMap gameMap;
+    MarioEntity mario;
+    Vector2 marioPosition;
 
     public GameScreen (final MainGame context) {
         super(context);
@@ -36,6 +42,9 @@ public class GameScreen extends AbstractScreen<GameUI>{
         mapRenderer.setMap(tiledMap);
         gameMap = new GameMap(tiledMap);
 
+        //LOAD COLLISION AREAS INTO WORLD
+        gameMap.initializeGroundCollisions(world);
+
         //LOAD CAMERA
         gameCamera = context.getGameCamera();
         gameCamera.position.set(15, 5, 0); // Adjust to your map's center in world units
@@ -44,13 +53,19 @@ public class GameScreen extends AbstractScreen<GameUI>{
         //INPUT
         Gdx.input.setInputProcessor(context.getStage());
 
+        //LOAD ENTITIES
+        marioPosition = parsePlayerStartLocation("PlayerSpawn", tiledMap);
+        mario = new MarioEntity(marioPosition.x, marioPosition.y, 5f, 1f, 1f, marioTextureRegionSheet, this);
+
+
+
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        assetManager.update();
         viewport.apply(false);
         mapRenderer.setView(gameCamera);
         mapRenderer.render();
@@ -58,6 +73,8 @@ public class GameScreen extends AbstractScreen<GameUI>{
         spriteBatch.setProjectionMatrix(gameCamera.combined);
         spriteBatch.begin();
 
+        gameMap.renderCollisionObjects(spriteBatch);
+        mario.render(spriteBatch);
         spriteBatch.end();
         profiler.reset();
     }

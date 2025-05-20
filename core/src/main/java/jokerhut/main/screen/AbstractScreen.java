@@ -70,5 +70,7 @@ public abstract class AbstractScreen <T extends Table> implements Screen {
 
     }
 
-
+    public World getWorld() {
+        return world;
+    }
 }
