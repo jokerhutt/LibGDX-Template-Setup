@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import jokerhut.main.constant.SETUPCONSTANTS;
-import jokerhut.main.ecs.ECSEngine;
 import jokerhut.main.screen.AbstractScreen;
 import jokerhut.main.screen.GameScreen;
 import jokerhut.main.screen.ScreenType;
@@ -45,8 +44,6 @@ public class MainGame extends Game {
     public static final FixtureDef FIXTURE_DEF = new FixtureDef();
 
     private World world;
-
-    private ECSEngine ecsEngine;
 
     //DELTA TIME
     private float accumulator;
@@ -95,10 +92,6 @@ public class MainGame extends Game {
         return world;
     }
 
-    public ECSEngine getEcsEngine() {
-        return ecsEngine;
-    }
-
     public float getAccumulator() {
         return accumulator;
     }
@@ -126,9 +119,6 @@ public class MainGame extends Game {
         assetManager.load(SETUPCONSTANTS.MAPPATH, TiledMap.class);
         assetManager.finishLoading();
         skin = initializeSkin(assetManager);
-
-        //ECS
-        ecsEngine = new ECSEngine(this);
 
         //STAGE AND CAMERA
         stage = new Stage(new FitViewport(1500, 500), spriteBatch);

@@ -1,5 +1,4 @@
-package jokerhut.main.map;
-
+package engine.map;
 import static jokerhut.main.MainGame.UNIT_SCALE;
 
 public class CollisionArea {
@@ -7,6 +6,7 @@ public class CollisionArea {
     private final float x;
     private final float y;
     private final float[] vertices;
+    private boolean polyLine;
 
     public float[] getVertices() {
         return vertices;
@@ -21,7 +21,9 @@ public class CollisionArea {
     }
 
 
-    public CollisionArea (final float x, final float y, final float[] vertices) {
+
+
+    public CollisionArea (final float x, final float y, final float[] vertices, boolean isPoly) {
         this.x = x * UNIT_SCALE;
         this.y = y * UNIT_SCALE;
         this.vertices = vertices;
@@ -30,6 +32,10 @@ public class CollisionArea {
             vertices[i + 1] = vertices[i + 1] * UNIT_SCALE;
 
         }
+        this.polyLine = isPoly;
     }
 
+    public boolean isPolyLine() {
+        return polyLine;
+    }
 }
