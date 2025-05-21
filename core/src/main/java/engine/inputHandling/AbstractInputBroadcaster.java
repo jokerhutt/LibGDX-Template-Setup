@@ -17,7 +17,7 @@ public abstract class AbstractInputBroadcaster implements InputProcessor {
             }
         }
         keyState = new boolean[KeyType.values().length];
-        listeners = new Array<InputBroadcastListener>();
+        listeners = new Array<>();
     }
 
     public abstract void notifyKeyDown (final KeyType gameKey);
@@ -37,6 +37,10 @@ public abstract class AbstractInputBroadcaster implements InputProcessor {
     @Override
     public boolean keyTyped(char character) {
         return false;
+    }
+
+    public boolean isKeyPressed (final KeyType gameKey) {
+        return keyState[gameKey.ordinal()];
     }
 
     @Override

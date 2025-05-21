@@ -50,12 +50,17 @@ public class GameScreen extends AbstractScreen<GameUI>{
         gameCamera.position.set(15, 5, 0); // Adjust to your map's center in world units
         gameCamera.update();
 
+        Gdx.app.log("Profiler",
+            "Java Heap: " + Gdx.app.getJavaHeap() / 1024 / 1024 + " MB, " +
+                "Native Heap: " + Gdx.app.getNativeHeap() / 1024 / 1024 + " MB"
+        );
+
         //INPUT
-        Gdx.input.setInputProcessor(context.getStage());
+        Gdx.input.setInputProcessor(context.getKeyInputBroadcaster());
 
         //LOAD ENTITIES
         marioPosition = parsePlayerStartLocation("PlayerSpawn", tiledMap);
-        mario = new MarioEntity(marioPosition.x, marioPosition.y, 5f, 1f, 1f, marioTextureRegionSheet, this);
+        mario = new MarioEntity(marioPosition.x, marioPosition.y + 1f, 5f, 1f, 1f, marioTextureRegionSheet, this, context.getKeyInputBroadcaster());
 
 
 
@@ -65,17 +70,25 @@ public class GameScreen extends AbstractScreen<GameUI>{
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        assetManager.update();
+//        assetManager.update();
+        mario.update(delta);
         viewport.apply(false);
+
         mapRenderer.setView(gameCamera);
         mapRenderer.render();
         box2DDebugRenderer.render(world, viewport.getCamera().combined);
         spriteBatch.setProjectionMatrix(gameCamera.combined);
         spriteBatch.begin();
-
-        gameMap.renderCollisionObjects(spriteBatch);
-        mario.render(spriteBatch);
+//
+//        gameMap.renderCollisionObjects(spriteBatch);
+//        mario.render(spriteBatch);
         spriteBatch.end();
+
+        System.out.println("Draw Calls: " + profiler.getDrawCalls());
+        System.out.println("Texture Bindings: " + profiler.getTextureBindings());
+        System.out.println("Shader Switches: " + profiler.getShaderSwitches());
+        System.out.println("Calls to glClear: " + profiler.getCalls());
+
         profiler.reset();
     }
 

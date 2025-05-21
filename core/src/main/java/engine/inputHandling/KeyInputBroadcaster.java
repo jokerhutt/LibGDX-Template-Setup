@@ -19,6 +19,7 @@ public class KeyInputBroadcaster extends AbstractInputBroadcaster {
 
     @Override
     public void notifyKeyDown (final KeyType gameKey) {
+        System.out.println(">>> notifyKeyDown: " + gameKey);
         keyState[gameKey.ordinal()] = true;
         for (final InputBroadcastListener listener : listeners) {
             listener.keyPressed(this, gameKey);

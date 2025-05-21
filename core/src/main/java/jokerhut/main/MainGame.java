@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import engine.inputHandling.KeyInputBroadcaster;
 import jokerhut.main.constant.SETUPCONSTANTS;
 import jokerhut.main.screen.AbstractScreen;
 import jokerhut.main.screen.GameScreen;
@@ -21,6 +22,7 @@ import jokerhut.main.screen.ScreenType;
 
 import java.util.EnumMap;
 
+import static jokerhut.main.constant.SETUPCONSTANTS.FIXED_TIME_STEP;
 import static jokerhut.main.util.SkinInitializer.initializeSkin;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -33,7 +35,7 @@ public class MainGame extends Game {
     private FitViewport screenViewport;
     private Box2DDebugRenderer box2DDebugRenderer;
     private AssetManager assetManager;
-
+    private KeyInputBroadcaster keyInputBroadcaster;
     private Stage stage;
 
     private Skin skin;
@@ -47,7 +49,6 @@ public class MainGame extends Game {
 
     //DELTA TIME
     private float accumulator;
-    private static final float FIXED_TIME_STEP = 1 / 60f;
 
     //SCALING
     public static final float UNIT_SCALE = 1 / 16f;
@@ -107,7 +108,7 @@ public class MainGame extends Game {
 
         //BOX2d
         Box2D.init();
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -9.8f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
         //FPS
@@ -125,6 +126,8 @@ public class MainGame extends Game {
         gameCamera = new OrthographicCamera();
         screenViewport = new FitViewport(30, 10, gameCamera);
 
+        keyInputBroadcaster = new KeyInputBroadcaster();
+
         setScreen(new GameScreen(this));
 
 
@@ -133,14 +136,17 @@ public class MainGame extends Game {
     @Override
     public void render () {
 
-        super.render();
-        final float deltaTime = Math.min(0.25f, Gdx.graphics.getRawDeltaTime());
-        accumulator += deltaTime;
+
+        float delta = Math.min(Gdx.graphics.getDeltaTime(), 1/60f);
+        accumulator += delta;
 
         while (accumulator >= FIXED_TIME_STEP) {
             world.step(FIXED_TIME_STEP, 6, 2);
             accumulator -= FIXED_TIME_STEP;
         }
+
+        super.render();
+        System.out.println("delta: " + Gdx.graphics.getDeltaTime());
 
         stage.getViewport().apply();
         stage.act();
@@ -158,4 +164,7 @@ public class MainGame extends Game {
         stage.dispose();
     }
 
+    public KeyInputBroadcaster getKeyInputBroadcaster() {
+        return keyInputBroadcaster;
+    }
 }

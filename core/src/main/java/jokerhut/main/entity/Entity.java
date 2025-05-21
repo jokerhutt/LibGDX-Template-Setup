@@ -23,6 +23,9 @@ public abstract class Entity {
         this.width = width;
         this.height = height;
         this.sprite = new Sprite(texture);
+        sprite.setRegion(texture);
+        sprite.setCenter(0, 0);
+        sprite.setSize(1f, 1f);
     }
 
     public abstract void createBody (World world,float spawnX,float spawnY);
@@ -34,9 +37,10 @@ public abstract class Entity {
         sprite.setRegion(textureRegion);
         if (body == null) {
             sprite.setCenter(0, 0);
-        } else {
-            sprite.setCenter(body.getPosition().x, body.getPosition().y);
         }
+//        } else {
+//            sprite.setCenter(body.getPosition().x, body.getPosition().y);
+//        }
 
         sprite.setSize(1f, 1f);
 
@@ -49,7 +53,7 @@ public abstract class Entity {
     }
 
     public void render (SpriteBatch batch) {
-        updateSprite(marioTextureRegionSheet);
+//        updateSprite(marioTextureRegionSheet);
         sprite.draw(batch);
 
     }

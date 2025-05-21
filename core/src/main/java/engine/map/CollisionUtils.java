@@ -1,6 +1,7 @@
 package engine.map;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -11,10 +12,28 @@ import static jokerhut.main.constant.SETUPCONSTANTS.BIT_GROUND;
 
 public class CollisionUtils {
 
+
+    public static void resetBodyAndFixtureDefinition () {
+        BODY_DEF.position.set(0, 0);
+        BODY_DEF.gravityScale = 1;
+        BODY_DEF.type = BodyDef.BodyType.StaticBody;
+        BODY_DEF.fixedRotation = false;
+
+        FIXTURE_DEF.density = 0;
+        FIXTURE_DEF.isSensor = false;
+        FIXTURE_DEF.restitution = 0;
+        FIXTURE_DEF.friction = 0.2f;
+        FIXTURE_DEF.filter.categoryBits = 0x0001;
+        FIXTURE_DEF.filter.maskBits = -1;
+        FIXTURE_DEF.shape = null;
+
+    }
+
     /**
      * adds
      */
     public static void createStaticChainShapeBody (CollisionArea collisionArea, World world, String userData) {
+        resetBodyAndFixtureDefinition();
         BODY_DEF.position.set(collisionArea.getX(), collisionArea.getY());
         BODY_DEF.fixedRotation = true;
         final Body body = world.createBody(BODY_DEF);
