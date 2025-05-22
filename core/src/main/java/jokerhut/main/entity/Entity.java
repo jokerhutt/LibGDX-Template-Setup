@@ -11,7 +11,7 @@ import static jokerhut.main.constant.SETUPCONSTANTS.marioTextureRegionSheet;
 
 public abstract class Entity {
 
-    protected Body body;
+    public Body body;
     protected float speed;
     protected Sprite sprite;
     protected float width;

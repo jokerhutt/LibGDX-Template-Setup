@@ -76,52 +76,6 @@ public class MarioEntity extends Entity implements InputBroadcastListener {
         processMovement();
     }
 
-//    public void createMainBody () {
-//        BodyDef bodyDef = new BodyDef();
-//        bodyDef.type = BodyDef.BodyType.DynamicBody;
-//        bodyDef.position.set(spawnX, spawnY);
-//        bodyDef.fixedRotation = true;
-//
-//        Body body = world.createBody(bodyDef);
-//
-//        // Dimensions (in world units)
-//        float radius = 0.25f;   // half of tile height for round ends
-//        float boxHeight = 0.5f; // vertical box without caps
-//        float boxWidth = 0.5f;
-//
-//        FixtureDef fixtureDef = new FixtureDef();
-//        fixtureDef.density = 1f;
-//        fixtureDef.friction = 0f;
-//        fixtureDef.restitution = 0f;
-//        fixtureDef.filter.categoryBits = BIT_ENEMY;
-//        fixtureDef.filter.maskBits = BIT_GROUND | BIT_PLAYER;
-//
-//        // Middle rectangle
-//        PolygonShape box = new PolygonShape();
-//        box.setAsBox(boxWidth, boxHeight);
-//        fixtureDef.shape = box;
-//        body.createFixture(fixtureDef);
-//        body.setLinearDamping(2f);
-//        box.dispose();
-//
-//        // Bottom circle
-//        CircleShape bottom = new CircleShape();
-//        bottom.setRadius(radius);
-//        bottom.setPosition(new Vector2(0, -boxHeight));
-//        fixtureDef.shape = bottom;
-//        body.createFixture(fixtureDef);
-//        bottom.dispose();
-//
-//        // Top circle
-//        CircleShape top = new CircleShape();
-//        top.setRadius(radius);
-//        top.setPosition(new Vector2(0, boxHeight));
-//        fixtureDef.shape = top;
-//        body.createFixture(fixtureDef);
-//        top.dispose();
-//
-//        this.body = body;
-//    }
 
     @Override
     public void createBody(World world, float spawnX, float spawnY) {

@@ -16,6 +16,7 @@ import jokerhut.main.view.GameUI;
 
 import static engine.map.MapUtils.parsePlayerStartLocation;
 import static jokerhut.main.MainGame.UNIT_SCALE;
+import static jokerhut.main.constant.SETUPCONSTANTS.FIXED_TIME_STEP;
 import static jokerhut.main.constant.SETUPCONSTANTS.marioTextureRegionSheet;
 
 public class GameScreen extends AbstractScreen<GameUI>{
@@ -25,6 +26,7 @@ public class GameScreen extends AbstractScreen<GameUI>{
     private final OrthographicCamera gameCamera;
     private final GLProfiler profiler;
     private GameMap gameMap;
+    float accumulator = 0f;
     MarioEntity mario;
     Vector2 marioPosition;
 
@@ -66,28 +68,42 @@ public class GameScreen extends AbstractScreen<GameUI>{
 
     }
 
+    public void updateLogic (float delta) {
+        world.step(delta, 6, 2);
+        mario.update(delta);
+        gameCamera.position.x = mario.body.getPosition().x;
+        gameCamera.update();
+        mapRenderer.setView(gameCamera);
+        viewport.apply(false);
+    }
+
     @Override
     public void render(float delta) {
+        delta = Math.min(delta, 0.25f);
+        accumulator += delta;
+
+        int updatesThisFrame = 0;
+
+        System.out.println(accumulator);
+
+        while (accumulator >= FIXED_TIME_STEP) {
+            updateLogic(FIXED_TIME_STEP);
+            accumulator -= FIXED_TIME_STEP;
+            updatesThisFrame++;
+        }
+
+        System.out.println("Updates this frame: " + updatesThisFrame);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        assetManager.update();
-        mario.update(delta);
-        viewport.apply(false);
-
         mapRenderer.setView(gameCamera);
-        mapRenderer.render();
-        box2DDebugRenderer.render(world, viewport.getCamera().combined);
-        spriteBatch.setProjectionMatrix(gameCamera.combined);
-        spriteBatch.begin();
-//
-//        gameMap.renderCollisionObjects(spriteBatch);
-//        mario.render(spriteBatch);
-        spriteBatch.end();
+//        mapRenderer.render();
 
-        System.out.println("Draw Calls: " + profiler.getDrawCalls());
-        System.out.println("Texture Bindings: " + profiler.getTextureBindings());
-        System.out.println("Shader Switches: " + profiler.getShaderSwitches());
-        System.out.println("Calls to glClear: " + profiler.getCalls());
+        box2DDebugRenderer.render(world, viewport.getCamera().combined);
+        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        spriteBatch.begin();
+//      gameMap.renderCollisionObjects(spriteBatch);
+        spriteBatch.end();
 
         profiler.reset();
     }

@@ -48,7 +48,6 @@ public class MainGame extends Game {
     private World world;
 
     //DELTA TIME
-    private float accumulator;
 
     //SCALING
     public static final float UNIT_SCALE = 1 / 16f;
@@ -93,10 +92,6 @@ public class MainGame extends Game {
         return world;
     }
 
-    public float getAccumulator() {
-        return accumulator;
-    }
-
     @Override
     public void create() {
 
@@ -112,7 +107,7 @@ public class MainGame extends Game {
         box2DDebugRenderer = new Box2DDebugRenderer();
 
         //FPS
-        accumulator = 0;
+
 
         //ASSETS
         assetManager = new AssetManager();
@@ -136,21 +131,11 @@ public class MainGame extends Game {
     @Override
     public void render () {
 
-
-        float delta = Math.min(Gdx.graphics.getDeltaTime(), 1/60f);
-        accumulator += delta;
-
-        while (accumulator >= FIXED_TIME_STEP) {
-            world.step(FIXED_TIME_STEP, 6, 2);
-            accumulator -= FIXED_TIME_STEP;
-        }
-
         super.render();
-        System.out.println("delta: " + Gdx.graphics.getDeltaTime());
 
-        stage.getViewport().apply();
-        stage.act();
-        stage.draw();
+//        stage.getViewport().apply();
+//        stage.act();
+//        stage.draw();
 
     }
 
